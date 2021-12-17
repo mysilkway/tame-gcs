@@ -1,3 +1,7 @@
+## Fork Information
+This is a fork of the master branch of EmbarkStudios/tame-gcs.
+* Added Archive storage class
+
 # 📂 tame-gcs
 
 [![Embark](https://img.shields.io/badge/embark-open%20source-blueviolet.svg)](https://embark.dev)
