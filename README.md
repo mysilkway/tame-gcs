@@ -1,3 +1,7 @@
+## Fork Information
+This is a fork of the master branch of EmbarkStudios/tame-gcs.
+* Added Archive storage class
+
 # 📂 tame-gcs
 
 [![Build Status](https://github.com/EmbarkStudios/tame-gcs/workflows/CI/badge.svg)](https://github.com/EmbarkStudios/tame-gcs/actions?workflow=CI)

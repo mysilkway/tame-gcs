@@ -112,6 +112,11 @@ pub enum StorageClass {
     /// Regional Storage also has better performance, particularly in terms of availability
     /// (DRA has a 99% availability SLA).
     DurableReducedAvailability,
+    /// [Archive Storage](https://cloud.google.com/storage/docs/storage-classes#archive)
+    /// is the lowest-cost, highly durable storage service for data archiving, online backup,
+    /// and disaster recovery. Unlike the "coldest" storage services offered by other Cloud providers,
+    /// your data is available within milliseconds, not hours or days.
+    Archive,
 }
 
 impl fmt::Display for StorageClass {
