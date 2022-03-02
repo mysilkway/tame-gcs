@@ -15,12 +15,14 @@ pub enum Error {
     InvalidPrefix(&'static str),
     #[error("Sequence {0} is not allowed")]
     InvalidSequence(&'static str),
+    #[error("Failed to parse URI")]
+    InvalidUri(UriError),
     #[error("HTTP error")]
     Http(#[source] HttpError),
     #[error("HTTP status")]
     HttpStatus(#[source] HttpStatusError),
-    #[error("An HTTP response didn't have a valid Content-Length")]
-    UnknownContentLength,
+    #[error("An HTTP response didn't have a valid {0}")]
+    UnknownHeader(http::header::HeaderName),
     #[error("GCS API error")]
     Api(#[source] ApiError),
     #[error("JSON error")]
@@ -35,7 +37,7 @@ pub enum Error {
     TooLongExpiration { requested: u64, max: u64 },
     #[error("Failed to parse url")]
     UrlParse(#[source] url::ParseError),
-    #[error("Unable to stringize header value '{0:?}'")]
+    #[error("Unable to stringize or parse header value '{0:?}'")]
     OpaqueHeaderValue(http::header::HeaderValue),
     #[error("I/O error occurred")]
     Io(#[source] IoError),
@@ -133,6 +135,29 @@ impl From<serde_json::Error> for Error {
 impl From<serde_urlencoded::ser::Error> for Error {
     fn from(e: serde_urlencoded::ser::Error) -> Self {
         Error::UrlEncode(e)
+    }
+}
+
+#[derive(Debug, thiserror::Error)]
+pub struct UriError(#[source] http::uri::InvalidUri);
+
+impl fmt::Display for UriError {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "{}", self.0)
+    }
+}
+
+impl PartialEq for UriError {
+    fn eq(&self, other: &Self) -> bool {
+        // This is **TERRIBLE** but all of the error details are unnecessarily
+        // private and it doesn't implement PartialEq ARGH
+        self.0.to_string() == other.0.to_string()
+    }
+}
+
+impl From<http::uri::InvalidUri> for Error {
+    fn from(e: http::uri::InvalidUri) -> Self {
+        Error::InvalidUri(UriError(e))
     }
 }
 

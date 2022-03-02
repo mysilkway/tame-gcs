@@ -1,3 +1,5 @@
+<!-- markdownlint-disable blanks-around-headings blanks-around-lists no-duplicate-heading -->
+
 # Changelog
 All notable changes to this project will be documented in this file.
 
@@ -6,6 +8,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- next-header -->
 ## [Unreleased] - ReleaseDate
+## [0.11.3] - 2022-02-24
+### Added
+- [PR#54](https://github.com/EmbarkStudios/tame-gcs/pull/54) added support for [resumable uploads](https://cloud.google.com/storage/docs/resumable-uploads). Thanks [@yottabytt](https://github.com/yottabytt)!
+
+## [0.11.2] - 2022-02-09
+### Fixed
+- [PR#55](https://github.com/EmbarkStudios/tame-gcs/pull/55) fixed a bug in signed url creation caused by a stray character in the timestamp string.
+
+## [0.11.1] - 2022-02-02
+### Fixed
+- [PR#53](https://github.com/EmbarkStudios/tame-gcs/pull/53) fixed a bug in deserialization introduced by [PR#52](https://github.com/EmbarkStudios/tame-gcs/pull/52).
+
+## [0.11.0] - 2022-02-02
+### Added
+- [PR#51](https://github.com/EmbarkStudios/tame-gcs/pull/51) implemented `futures_util::Stream` for `Multipart<Bytes>`. Thanks [@shikhar](https://github.com/shikhar)!
+
+### Changed
+- [PR#52](https://github.com/EmbarkStudios/tame-gcs/pull/52) replaced `chrono` with `time` due to maintenance issues with `chrono`.
+
 ## [0.10.0] - 2021-03-26
 ### Changed
 - Renamed `Error::API` => `Error::Api` and `Error::SingingError` => `Error::Signing`.
@@ -134,7 +155,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Initial add of `tame-gcs`
 
 <!-- next-url -->
-[Unreleased]: https://github.com/EmbarkStudios/tame-gcs/compare/0.10.0...HEAD
+[Unreleased]: https://github.com/EmbarkStudios/tame-gcs/compare/0.11.3...HEAD
+[0.11.3]: https://github.com/EmbarkStudios/tame-gcs/compare/0.11.2...0.11.3
+[0.11.2]: https://github.com/EmbarkStudios/tame-gcs/compare/0.11.1...0.11.2
+[0.11.1]: https://github.com/EmbarkStudios/tame-gcs/compare/0.11.0...0.11.1
+[0.11.0]: https://github.com/EmbarkStudios/tame-gcs/compare/0.10.0...0.11.0
 [0.10.0]: https://github.com/EmbarkStudios/tame-gcs/compare/0.9.1...0.10.0
 [0.9.1]: https://github.com/EmbarkStudios/tame-gcs/compare/0.9.0...0.9.1
 [0.9.0]: https://github.com/EmbarkStudios/tame-gcs/compare/0.8.1...0.9.0
