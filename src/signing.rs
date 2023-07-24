@@ -59,7 +59,7 @@ pub trait Signer {
 
 /// Internal type use to grab the pieces of the service account we need for signing
 #[derive(Deserialize, Debug, Clone)]
-struct ServiceAccountInfo {
+pub struct ServiceAccountInfo {
     /// The private key we use to sign
     private_key: String,
     /// The unique id used as the issuer of the JWT claim
@@ -92,7 +92,10 @@ impl ServiceAccount {
     /// Attempts to load a service account from a JSON byte slice
     pub fn load_json<B: AsRef<[u8]>>(json_data: B) -> Result<Self, Error> {
         let info: ServiceAccountInfo = serde_json::from_slice(json_data.as_ref())?;
+        Self::load_info(info)
+    }
 
+    pub fn load_info(info: ServiceAccountInfo) -> Result<Self, Error> {
         let key_string = info
             .private_key
             .split("-----")
