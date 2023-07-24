@@ -61,9 +61,9 @@ pub trait Signer {
 #[derive(Deserialize, Debug, Clone)]
 pub struct ServiceAccountInfo {
     /// The private key we use to sign
-    private_key: String,
+    pub private_key: String,
     /// The unique id used as the issuer of the JWT claim
-    client_email: String,
+    pub client_email: String,
 }
 
 /// Provides the details needed for signing a URL
