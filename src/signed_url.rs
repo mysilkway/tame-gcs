@@ -97,7 +97,7 @@ where
         let mut signed_url =
             Url::parse(format!("https://{}", host).as_str()).map_err(Error::UrlParse)?;
 
-        signed_url.set_path(&resource_path);
+        signed_url.join(&resource_path).map_err(Error::UrlParse)?;
 
         let mut headers = optional.headers;
 
