@@ -67,6 +67,10 @@ where
             });
         }
 
+        let host = optional
+            .cdn_domain
+            .unwrap_or_else(|| "storage.googleapis.com".to_string());
+
         // First, create the canonical request, as described here
         // https://cloud.google.com/storage/docs/authentication/canonical-requests
         //
@@ -75,7 +79,7 @@ where
         // CANONICAL_QUERY_STRING
         // CANONICAL_HEADERS
         let mut signed_url =
-            Url::parse("https://storage.googleapis.com").map_err(Error::UrlParse)?;
+            Url::parse(format!("https://{}", host).as_str()).map_err(Error::UrlParse)?;
 
         // https://cloud.google.com/storage/docs/authentication/canonical-requests#about-resource-path
         let resource_path = format!(
@@ -91,7 +95,8 @@ where
         // `host` is always required
         headers.insert(
             http::header::HOST,
-            http::header::HeaderValue::from_static("storage.googleapis.com"),
+            http::header::HeaderValue::from_str(host.as_str())
+                .map_err(|_err| Error::InvalidHeaderValue(host))?,
         );
 
         // Eliminate duplicate header names by creating one header name with a comma-separated list of values.
@@ -280,6 +285,7 @@ pub struct SignedUrlOptional<'a> {
     pub region: &'a str,
     /// Additional query paramters in the request
     pub query_params: Vec<(Cow<'a, str>, Cow<'a, str>)>,
+    pub cdn_domain: Option<String>,
 }
 
 impl<'a> Default for SignedUrlOptional<'a> {
@@ -290,6 +296,7 @@ impl<'a> Default for SignedUrlOptional<'a> {
             headers: http::HeaderMap::default(),
             region: "auto",
             query_params: Vec::new(),
+            cdn_domain: None,
         }
     }
 }

@@ -39,6 +39,8 @@ pub enum Error {
     UrlParse(#[source] url::ParseError),
     #[error("Unable to stringize or parse header value '{0:?}'")]
     OpaqueHeaderValue(http::header::HeaderValue),
+    #[error("Invalid header value: '{0}'")]
+    InvalidHeaderValue(String),
     #[error("I/O error occurred")]
     Io(#[source] IoError),
     #[error("Unable to decode base64")]
