@@ -71,8 +71,10 @@ where
             (
                 cd,
                 format!(
-                    "/{}/{}",
-                    optional.resource_path.unwrap_or_default(),
+                    "{}/{}",
+                    optional
+                        .resource_path
+                        .map_or_else(|| "".to_string(), |v| format!("/{}", v)),
                     perc_enc::percent_encode(id.object().as_ref(), crate::util::PATH_ENCODE_SET),
                 ),
             )
