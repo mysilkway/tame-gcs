@@ -71,7 +71,8 @@ where
             (
                 cd,
                 format!(
-                    "/{}",
+                    "/{}/{}",
+                    optional.resource_path.unwrap_or_default(),
                     perc_enc::percent_encode(id.object().as_ref(), crate::util::PATH_ENCODE_SET),
                 ),
             )
@@ -97,7 +98,7 @@ where
         let mut signed_url =
             Url::parse(format!("https://{}", host).as_str()).map_err(Error::UrlParse)?;
 
-        signed_url.join(&resource_path).map_err(Error::UrlParse)?;
+        signed_url.set_path(&resource_path);
 
         let mut headers = optional.headers;
 
@@ -295,6 +296,7 @@ pub struct SignedUrlOptional<'a> {
     /// Additional query paramters in the request
     pub query_params: Vec<(Cow<'a, str>, Cow<'a, str>)>,
     pub cdn_domain: Option<String>,
+    pub resource_path: Option<String>,
 }
 
 impl<'a> Default for SignedUrlOptional<'a> {
@@ -306,6 +308,7 @@ impl<'a> Default for SignedUrlOptional<'a> {
             region: "auto",
             query_params: Vec::new(),
             cdn_domain: None,
+            resource_path: None,
         }
     }
 }
