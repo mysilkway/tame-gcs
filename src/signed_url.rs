@@ -67,9 +67,25 @@ where
             });
         }
 
-        let host = optional
-            .cdn_domain
-            .unwrap_or_else(|| "storage.googleapis.com".to_string());
+        let (host, resource_path) = if let Some(cd) = optional.cdn_domain {
+            (
+                cd,
+                format!(
+                    "/{}",
+                    perc_enc::percent_encode(id.object().as_ref(), crate::util::PATH_ENCODE_SET),
+                ),
+            )
+        } else {
+            (
+                "storage.googleapis.com".to_string(),
+                // https://cloud.google.com/storage/docs/authentication/canonical-requests#about-resource-path
+                format!(
+                    "/{}/{}",
+                    perc_enc::percent_encode(id.bucket().as_ref(), crate::util::PATH_ENCODE_SET),
+                    perc_enc::percent_encode(id.object().as_ref(), crate::util::PATH_ENCODE_SET),
+                ),
+            )
+        };
 
         // First, create the canonical request, as described here
         // https://cloud.google.com/storage/docs/authentication/canonical-requests
@@ -80,13 +96,6 @@ where
         // CANONICAL_HEADERS
         let mut signed_url =
             Url::parse(format!("https://{}", host).as_str()).map_err(Error::UrlParse)?;
-
-        // https://cloud.google.com/storage/docs/authentication/canonical-requests#about-resource-path
-        let resource_path = format!(
-            "/{}/{}",
-            perc_enc::percent_encode(id.bucket().as_ref(), crate::util::PATH_ENCODE_SET),
-            perc_enc::percent_encode(id.object().as_ref(), crate::util::PATH_ENCODE_SET),
-        );
 
         signed_url.set_path(&resource_path);
 
