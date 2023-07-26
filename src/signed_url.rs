@@ -83,8 +83,11 @@ where
                 "storage.googleapis.com".to_string(),
                 // https://cloud.google.com/storage/docs/authentication/canonical-requests#about-resource-path
                 format!(
-                    "/{}/{}",
+                    "/{}{}/{}",
                     perc_enc::percent_encode(id.bucket().as_ref(), crate::util::PATH_ENCODE_SET),
+                    optional
+                        .resource_path
+                        .map_or_else(|| "".to_string(), |v| format!("/{}", v)),
                     perc_enc::percent_encode(id.object().as_ref(), crate::util::PATH_ENCODE_SET),
                 ),
             )
